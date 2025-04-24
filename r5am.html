@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>令和4年度 午前 - 測量士試験</title>
+  <title>令和5年度 午前 - 測量士試験</title>
   <style>
     /* ページ全体の背景色とテキスト色 */
     body {
@@ -107,7 +107,7 @@
   </style>
 </head>
 <body>
-  <h1>令和4年度 午前 試験問題</h1>
+  <h1>令和5年度 午前 試験問題</h1>
 
   <div class="button-container">
     <!-- 1〜28のボタンを生成 -->
@@ -137,8 +137,8 @@
     function updateQuestionDisplay() {
       const paddedNum = String(currentNum).padStart(2, '0');
       const filename = isAnswerShown 
-        ? `r4/R4-${currentNum}.png` 
-        : `r4/04${paddedNum}.jpg`;
+        ? `r5/R5-${currentNum}.png` 
+        : `r5/05${paddedNum}.jpg`;
 
       const area = document.getElementById('questionArea');
       area.innerHTML = `
