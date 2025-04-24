@@ -20,6 +20,9 @@
     }
     img {
       max-width: 100%;
+      margin-top: 10px;
+    }
+    h2 {
       margin-top: 20px;
     }
   </style>
@@ -60,8 +63,8 @@
 
       const area = document.getElementById('questionArea');
       area.innerHTML = `
+        <h2>[ NO.${currentNum} ]</h2>
         <img id="qImage" src="${filename}" alt="問題${currentNum}">
-        <br>
         <div class="nav-buttons">
           <button onclick="toggleAnswer()">解答</button>
           <button onclick="prevQuestion()" ${currentNum === 1 ? 'disabled' : ''}>← 前の問題</button>
