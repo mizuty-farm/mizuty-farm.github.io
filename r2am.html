@@ -40,7 +40,7 @@
   <script>
     function showQuestion(num) {
       const paddedNum = String(num).padStart(2, '0'); // "01", "02", ..., "28"
-      const filename = `r2/02${paddedNum}.jpg`; // "0201.jpg", "0202.jpg", ...
+      const filename = `r2/02${paddedNum}.jpg`; // フォルダを含めたパス
       const area = document.getElementById('questionArea');
       area.innerHTML = `<img src="${filename}" alt="問題${num}">`;
     }
