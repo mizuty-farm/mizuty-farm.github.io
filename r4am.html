@@ -39,8 +39,10 @@
 
   <script>
     function showQuestion(num) {
+      const paddedNum = String(num).padStart(2, '0'); // "01", "02", ..., "28"
+      const filename = `04${paddedNum}.jpg`; // "0401.jpg", "0402.jpg", ...
       const area = document.getElementById('questionArea');
-      area.innerHTML = `<img src="r2_${num}.png" alt="問題${num}">`;
+      area.innerHTML = `<img src="${filename}" alt="問題${num}">`;
     }
   </script>
 </body>
