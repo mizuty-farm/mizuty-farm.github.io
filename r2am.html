@@ -8,10 +8,12 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
+      margin-bottom: 20px;
     }
     button {
       padding: 10px 15px;
       font-size: 16px;
+      cursor: pointer;
     }
     img {
       max-width: 100%;
@@ -38,13 +40,42 @@
   <a href="index.html">← ホームに戻る</a>
 
   <script>
+    let currentNum = null;
+    let isAnswerShown = false;
+
     function showQuestion(num) {
-      const paddedNum = String(num).padStart(2, '0'); // "01", "02", ..., "28"
-      const filename = `r2/02${paddedNum}.jpg`; // フォルダを含めたパス
+      currentNum = num;
+      isAnswerShown = false;
+
+      const paddedNum = String(num).padStart(2, '0'); // "01"〜"28"
+      const filename = `r2/02${paddedNum}.jpg`;
+
       const area = document.getElementById('questionArea');
-      area.innerHTML = `<img src="${filename}" alt="問題${num}">`;
+      area.innerHTML = `
+        <img id="qImage" src="${filename}" alt="問題${num}">
+        <br>
+        <button onclick="toggleAnswer()">解答</button>
+      `;
+    }
+
+    function toggleAnswer() {
+      if (currentNum === null) return;
+
+      const paddedNum = String(currentNum).padStart(1, ''); // "1"〜"28"
+      const image = document.getElementById('qImage');
+
+      if (isAnswerShown) {
+        // 問題に戻す
+        const questionFilename = `r2/02${String(currentNum).padStart(2, '0')}.jpg`;
+        image.src = questionFilename;
+        isAnswerShown = false;
+      } else {
+        // 解答に切り替え
+        const answerFilename = `r2/R2-${currentNum}.png`;
+        image.src = answerFilename;
+        isAnswerShown = true;
+      }
     }
   </script>
 </body>
 </html>
-
