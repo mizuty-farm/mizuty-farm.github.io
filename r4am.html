@@ -8,13 +8,21 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
+      margin-bottom: 20px;
     }
     button {
       padding: 10px 15px;
       font-size: 16px;
+      cursor: pointer;
+    }
+    .nav-buttons {
+      margin-top: 10px;
     }
     img {
       max-width: 100%;
+      margin-top: 10px;
+    }
+    h2 {
       margin-top: 20px;
     }
   </style>
@@ -38,11 +46,53 @@
   <a href="index.html">← ホームに戻る</a>
 
   <script>
+    let currentNum = null;
+    let isAnswerShown = false;
+
     function showQuestion(num) {
-      const paddedNum = String(num).padStart(2, '0'); // "01", "02", ..., "28"
-      const filename = `r4/04${paddedNum}.jpg`; // フォルダを含めたパス
+      currentNum = num;
+      isAnswerShown = false;
+      updateQuestionDisplay();
+    }
+
+    function updateQuestionDisplay() {
+      const paddedNum = String(currentNum).padStart(2, '0');
+      const filename = isAnswerShown 
+        ? `r4/R4-${currentNum}.png` 
+        : `r4/04${paddedNum}.jpg`;
+
       const area = document.getElementById('questionArea');
-      area.innerHTML = `<img src="${filename}" alt="問題${num}">`;
+      area.innerHTML = `
+        <h2>[ NO.${currentNum} ]</h2>
+        <img id="qImage" src="${filename}" alt="問題${currentNum}">
+        <div class="nav-buttons">
+          <button onclick="toggleAnswer()">解答</button>
+          <button onclick="prevQuestion()" ${currentNum === 1 ? 'disabled' : ''}>← 前の問題</button>
+          <button onclick="nextQuestion()" ${currentNum === 28 ? 'disabled' : ''}>次の問題 →</button>
+        </div>
+      `;
+    }
+
+    function toggleAnswer() {
+      if (currentNum === null) return;
+      isAnswerShown = !isAnswerShown;
+      updateQuestionDisplay();
+    }
+
+    function prevQuestion() {
+      if (currentNum > 1) {
+        currentNum--;
+        isAnswerShown = false;
+        updateQuestionDisplay();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentNum < 28) {
+        currentNum++;
+        isAnswerShown = false;
+        updateQuestionDisplay();
+      }
     }
   </script>
 </body>
