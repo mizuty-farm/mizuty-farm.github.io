@@ -15,6 +15,9 @@
       font-size: 16px;
       cursor: pointer;
     }
+    .nav-buttons {
+      margin-top: 10px;
+    }
     img {
       max-width: 100%;
       margin-top: 20px;
@@ -46,34 +49,46 @@
     function showQuestion(num) {
       currentNum = num;
       isAnswerShown = false;
+      updateQuestionDisplay();
+    }
 
-      const paddedNum = String(num).padStart(2, '0'); // "01"〜"28"
-      const filename = `r2/02${paddedNum}.jpg`;
+    function updateQuestionDisplay() {
+      const paddedNum = String(currentNum).padStart(2, '0');
+      const filename = isAnswerShown 
+        ? `r2/R2-${currentNum}.png` 
+        : `r2/02${paddedNum}.jpg`;
 
       const area = document.getElementById('questionArea');
       area.innerHTML = `
-        <img id="qImage" src="${filename}" alt="問題${num}">
+        <img id="qImage" src="${filename}" alt="問題${currentNum}">
         <br>
-        <button onclick="toggleAnswer()">解答</button>
+        <div class="nav-buttons">
+          <button onclick="toggleAnswer()">解答</button>
+          <button onclick="prevQuestion()" ${currentNum === 1 ? 'disabled' : ''}>← 前の問題</button>
+          <button onclick="nextQuestion()" ${currentNum === 28 ? 'disabled' : ''}>次の問題 →</button>
+        </div>
       `;
     }
 
     function toggleAnswer() {
       if (currentNum === null) return;
+      isAnswerShown = !isAnswerShown;
+      updateQuestionDisplay();
+    }
 
-      const paddedNum = String(currentNum).padStart(1, ''); // "1"〜"28"
-      const image = document.getElementById('qImage');
-
-      if (isAnswerShown) {
-        // 問題に戻す
-        const questionFilename = `r2/02${String(currentNum).padStart(2, '0')}.jpg`;
-        image.src = questionFilename;
+    function prevQuestion() {
+      if (currentNum > 1) {
+        currentNum--;
         isAnswerShown = false;
-      } else {
-        // 解答に切り替え
-        const answerFilename = `r2/R2-${currentNum}.png`;
-        image.src = answerFilename;
-        isAnswerShown = true;
+        updateQuestionDisplay();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentNum < 28) {
+        currentNum++;
+        isAnswerShown = false;
+        updateQuestionDisplay();
       }
     }
   </script>
