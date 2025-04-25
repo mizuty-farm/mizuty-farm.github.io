@@ -113,7 +113,6 @@
       const count = questions[key];
       const area = document.getElementById('questionArea');
       area.innerHTML = `<h2>[ NO.${key} ]</h2>`;
-      // 1 枚なら key のまま、複数なら -1, -2…を付与
       if (count === 1) {
         area.innerHTML += `<img src="r6/R6P-${key}.png" alt="問${key}">`;
       } else {
