@@ -81,24 +81,24 @@
   <a href="index.html" class="home">← ホームに戻る</a>
 
   <script>
-    // 問番号、ブロック、項目数を定義
+    // 問題構造の定義
     const questions = {};
     for (let q = 1; q <= 5; q++) {
       ['A','B','C','D'].forEach(block => {
         for (let n = 1; n <= 4; n++) {
-          const key = `${q}${block}${n}`;
-          // 画像が複数枚ある小問には個別に枚数を指定する（例: 問1A4は2枚）
+          // キーを "1-A1" のようにハイフン付きで生成
+          const key = `${q}-${block}${n}`;
+          // 画像枚数の指定
           let count = 1;
-          if (q===1 && block==='A' && n===4) count = 2;
-          if (q===2 && block==='B' && n===2) count = 2;
-          if (q===3 && block==='C' && n===3) count = 2;
-          if (q===4 && block==='D' && n===1) count = 2;
-          if (q===5 && block==='A' && n===1) count = 2;
+          if (q === 1 && block === 'A' && n === 4) count = 2;
+          if (q === 2 && block === 'B' && n === 2) count = 2;
+          if (q === 3 && block === 'C' && n === 3) count = 2;
+          if (q === 4 && block === 'D' && n === 1) count = 2;
+          if (q === 5 && block === 'A' && n === 1) count = 2;
           questions[key] = count;
         }
       });
     }
-
     // ボタンの生成
     const container = document.getElementById('buttonContainer');
     Object.keys(questions).forEach(key => {
