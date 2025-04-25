@@ -145,8 +145,8 @@
         <h2>[ NO.${currentNum} ]</h2>
         <img id="qImage" src="${filename}" alt="問題${currentNum}">
         <div class="nav-buttons">
-          <button onclick="toggleAnswer()">解答</button>
           <button onclick="prevQuestion()" ${currentNum === 1 ? 'disabled' : ''}>← 前の問題</button>
+          <button onclick="toggleAnswer()">解答</button>
           <button onclick="nextQuestion()" ${currentNum === 28 ? 'disabled' : ''}>次の問題 →</button>
         </div>
       `;
