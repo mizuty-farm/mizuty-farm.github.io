@@ -5,7 +5,7 @@
   <title>令和6年度 午後 - 測量士試験</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
       background-color: #f4f7f6;
       color: #333;
       margin: 0;
@@ -18,37 +18,36 @@
       padding: 20px 0;
       margin: 0;
     }
-    /* ボタン一覧 */
-    .button-container {
+    .selector-container {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 16px;
       justify-content: center;
+      gap: 10px;
+      padding: 20px;
       background: #e8f5e9;
     }
-    .button-container button {
+    .selector-container select,
+    .selector-container button {
       padding: 8px 12px;
-      border: 2px solid #4CAF50;
-      background: #fff;
-      color: #4CAF50;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: .2s;
       font-size: 14px;
+      border: 2px solid #4CAF50;
+      border-radius: 4px;
     }
-    .button-container button:hover {
+    .selector-container button {
       background: #4CAF50;
       color: #fff;
+      cursor: pointer;
+      transition: background .2s;
     }
-    /* 画像表示エリア */
+    .selector-container button:hover {
+      background: #45a049;
+    }
     #questionArea {
       text-align: center;
       padding: 20px;
     }
     #questionArea h2 {
-      margin-bottom: 12px;
       color: #2c3e50;
+      margin-bottom: 12px;
     }
     #questionArea img {
       max-width: 90%;
@@ -64,18 +63,23 @@
       color: #3498db;
       text-decoration: none;
     }
-    a.home:hover { text-decoration: underline; }
+    a.home:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
   <h1>令和6年度 午後 試験問題</h1>
 
-  <div class="button-container" id="buttonContainer">
-    <!-- ここにボタンが自動で追加されます -->
+  <div class="selector-container">
+    <select id="selQuestion"></select>
+    <select id="selBlock"></select>
+    <select id="selNum"></select>
+    <button onclick="displaySelected()">表示</button>
   </div>
 
   <div id="questionArea">
-    <p>ボタンを押すと対応する画像が表示されます。</p>
+    <p>プルダウンから「問番号」「ブロック」「小問」を選択して「表示」を押してください。</p>
   </div>
 
   <a href="index.html" class="home">← ホームに戻る</a>
@@ -86,37 +90,45 @@
     for (let q = 1; q <= 5; q++) {
       ['A','B','C','D'].forEach(block => {
         for (let n = 1; n <= 4; n++) {
-          // キーを "1-A1" のようにハイフン付きで生成
           const key = `${q}-${block}${n}`;
-          // 画像枚数の指定
           let count = 1;
-          if (q === 1 && block === 'A' && n === 4) count = 2;
-          if (q === 2 && block === 'B' && n === 2) count = 2;
-          if (q === 3 && block === 'C' && n === 3) count = 2;
-          if (q === 4 && block === 'D' && n === 1) count = 2;
-          if (q === 5 && block === 'A' && n === 1) count = 2;
+          if (q===1&&block==='A'&&n===4) count=2;
+          if (q===2&&block==='B'&&n===2) count=2;
+          if (q===3&&block==='C'&&n===3) count=2;
+          if (q===4&&block==='D'&&n===1) count=2;
+          if (q===5&&block==='A'&&n===1) count=2;
           questions[key] = count;
         }
       });
     }
-    // ボタンの生成
-    const container = document.getElementById('buttonContainer');
-    Object.keys(questions).forEach(key => {
-      const btn = document.createElement('button');
-      btn.textContent = `問${key}`;
-      btn.addEventListener('click', () => showQuestion(key));
-      container.appendChild(btn);
-    });
 
-    // 画像表示関数
-    function showQuestion(key) {
-      const count = questions[key];
+    // セレクトにオプション追加
+    const selQ = document.getElementById('selQuestion');
+    const selB = document.getElementById('selBlock');
+    const selN = document.getElementById('selNum');
+    // 問番号
+    for (let i=1;i<=5;i++){
+      selQ.add(new Option(`問${i}`, i));
+    }
+    // ブロック
+    ['A','B','C','D'].forEach(b=> selB.add(new Option(b, b)));
+    // 小問番号
+    for (let i=1;i<=4;i++){
+      selN.add(new Option(i, i));
+    }
+
+    function displaySelected(){
+      const q = selQ.value;
+      const b = selB.value;
+      const n = selN.value;
+      const key = `${q}-${b}${n}`;
+      const cnt = questions[key];
       const area = document.getElementById('questionArea');
       area.innerHTML = `<h2>[ NO.${key} ]</h2>`;
-      if (count === 1) {
+      if(cnt===1){
         area.innerHTML += `<img src="r6/R6P-${key}.png" alt="問${key}">`;
       } else {
-        for (let i = 1; i <= count; i++) {
+        for(let i=1;i<=cnt;i++){
           area.innerHTML += `<img src="r6/R6P-${key}-${i}.png" alt="問${key}-${i}">`;
         }
       }
