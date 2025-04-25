@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>令和6年度 午後 - 測量士試験</title>
   <style>
-    /* ページ全体の背景色とテキスト色 */
     body {
       font-family: 'Arial', sans-serif;
       background-color: #f4f7f6;
@@ -12,7 +11,6 @@
       margin: 0;
       padding: 0;
     }
-
     h1 {
       text-align: center;
       background-color: #4CAF50;
@@ -20,157 +18,108 @@
       padding: 20px 0;
       margin: 0;
     }
-
-    h2 {
-      color: #2c3e50;
-      margin-top: 20px;
-      font-size: 22px;
-    }
-
-    /* ボタンコンテナ */
+    /* ボタン一覧 */
     .button-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 8px;
+      padding: 16px;
       justify-content: center;
+      background: #e8f5e9;
     }
-
-    /* ボタンのスタイル */
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      cursor: pointer;
+    .button-container button {
+      padding: 8px 12px;
       border: 2px solid #4CAF50;
-      background-color: #fff;
+      background: #fff;
       color: #4CAF50;
-      border-radius: 5px;
-      transition: all 0.3s ease;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: .2s;
+      font-size: 14px;
     }
-
-    /* ボタンのホバーエフェクト */
-    button:hover {
-      background-color: #4CAF50;
-      color: white;
+    .button-container button:hover {
+      background: #4CAF50;
+      color: #fff;
     }
-
-    /* 解答ボタンの色 */
-    .nav-buttons button {
-      background-color: #f39c12;
-      color: white;
-    }
-
-    .nav-buttons button:hover {
-      background-color: #e67e22;
-    }
-
-    /* 画像のスタイル */
-    img {
-      max-width: 100%;
-      margin-top: 10px;
-      border: 4px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    /* ナビゲーションボタンの配置 */
-    .nav-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 15px;
-    }
-
-    .nav-buttons button {
-      width: 45%;
-    }
-
-    /* ページ全体の中央寄せ */
+    /* 画像表示エリア */
     #questionArea {
       text-align: center;
-      margin-top: 20px;
+      padding: 20px;
     }
-
-    /* ホームリンクのスタイル */
-    a {
+    #questionArea h2 {
+      margin-bottom: 12px;
+      color: #2c3e50;
+    }
+    #questionArea img {
+      max-width: 90%;
+      margin: 8px 0;
+      border: 3px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    a.home {
       display: block;
       text-align: center;
-      margin-top: 20px;
-      font-size: 18px;
+      margin: 20px 0;
       color: #3498db;
       text-decoration: none;
     }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
+    a.home:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <h1>令和6年度 午後 試験問題</h1>
 
-  <div class="button-container">
-    <!-- 1〜28のボタンを生成 -->
-    <script>
-      for (let i = 1; i <= 28; i++) {
-        document.write(`<button onclick="showQuestion(${i})">${i}</button>`);
-      }
-    </script>
+  <div class="button-container" id="buttonContainer">
+    <!-- ここにボタンが自動で追加されます -->
   </div>
 
   <div id="questionArea">
-    <p>表示したい問題番号をクリックしてください。</p>
+    <p>ボタンを押すと対応する画像が表示されます。</p>
   </div>
 
-  <a href="index.html">← ホームに戻る</a>
+  <a href="index.html" class="home">← ホームに戻る</a>
 
   <script>
-    let currentNum = null;
-    let isAnswerShown = false;
-
-    function showQuestion(num) {
-      currentNum = num;
-      isAnswerShown = false;
-      updateQuestionDisplay();
+    // 問番号、ブロック、項目数を定義
+    const questions = {};
+    for (let q = 1; q <= 5; q++) {
+      ['A','B','C','D'].forEach(block => {
+        for (let n = 1; n <= 4; n++) {
+          const key = `${q}${block}${n}`;
+          // 画像が複数枚ある小問には個別に枚数を指定する（例: 問1A4は2枚）
+          let count = 1;
+          if (q===1 && block==='A' && n===4) count = 2;
+          if (q===2 && block==='B' && n===2) count = 2;
+          if (q===3 && block==='C' && n===3) count = 2;
+          if (q===4 && block==='D' && n===1) count = 2;
+          if (q===5 && block==='A' && n===1) count = 2;
+          questions[key] = count;
+        }
+      });
     }
 
-    function updateQuestionDisplay() {
-      const paddedNum = String(currentNum).padStart(2, '0');
-      const filename = isAnswerShown 
-        ? `r6/R6P-${currentNum}.png` 
-        : `r6/P06${paddedNum}.jpg`;
+    // ボタンの生成
+    const container = document.getElementById('buttonContainer');
+    Object.keys(questions).forEach(key => {
+      const btn = document.createElement('button');
+      btn.textContent = `問${key}`;
+      btn.addEventListener('click', () => showQuestion(key));
+      container.appendChild(btn);
+    });
 
+    // 画像表示関数
+    function showQuestion(key) {
+      const count = questions[key];
       const area = document.getElementById('questionArea');
-      area.innerHTML = `
-        <h2>[ NO.${currentNum} ]</h2>
-        <img id="qImage" src="${filename}" alt="問題${currentNum}">
-        <div class="nav-buttons">
-          <button onclick="toggleAnswer()">解答</button>
-          <button onclick="prevQuestion()" ${currentNum === 1 ? 'disabled' : ''}>← 前の問題</button>
-          <button onclick="nextQuestion()" ${currentNum === 28 ? 'disabled' : ''}>次の問題 →</button>
-        </div>
-      `;
-    }
-
-    function toggleAnswer() {
-      if (currentNum === null) return;
-      isAnswerShown = !isAnswerShown;
-      updateQuestionDisplay();
-    }
-
-    function prevQuestion() {
-      if (currentNum > 1) {
-        currentNum--;
-        isAnswerShown = false;
-        updateQuestionDisplay();
-      }
-    }
-
-    function nextQuestion() {
-      if (currentNum < 28) {
-        currentNum++;
-        isAnswerShown = false;
-        updateQuestionDisplay();
+      area.innerHTML = `<h2>[ NO.${key} ]</h2>`;
+      // 1 枚なら key のまま、複数なら -1, -2…を付与
+      if (count === 1) {
+        area.innerHTML += `<img src="r6/R6P-${key}.png" alt="問${key}">`;
+      } else {
+        for (let i = 1; i <= count; i++) {
+          area.innerHTML += `<img src="r6/R6P-${key}-${i}.png" alt="問${key}-${i}">`;
+        }
       }
     }
   </script>
